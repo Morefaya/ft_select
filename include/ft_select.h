@@ -5,6 +5,7 @@
 # include "ft_printf.h"
 # include <term.h>
 # include <fcntl.h>
+# include <sys/ioctl.h>
 
 # define NAME(x) ((t_elem*)(x->content))->name
 
