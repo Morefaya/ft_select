@@ -1,50 +1,91 @@
 #include "ft_select.h"
 
+static t_select	*ret_tree(void)
+{
+	static t_select	*data = NULL;
+
+	if (!data)
+	{
+		if (!(data = (t_select*)malloc(sizeof(t_select))))
+		{
+			ft_printf("Error malloc\n");
+			exit(2);
+		}
+	}
+	return (data);
+}
+
 int	putit(int c)
 {
-	static int	fd = -1;
-
-	if (fd == -1)
-		fd = open("/dev/tty", O_WRONLY);
-	ft_putchar_fd(c, fd);
+	t_select	*data;
+	
+	data = ret_tree();
+	ft_putchar_fd(c, data->fd);
 	return (0);
 }
 
-int	main(int ac, char **av)
+
+static void	ft_resize(int c)
 {
-	t_tree	*e_tree;
+	t_select	*data;
 
-	if (!(e_tree = get_arg(ac, av)))
+	data = ret_tree();
+	(void)c;
+	tputs(tgetstr("cl", NULL), data->fd, putit);
+	print_select(data);
+}
+
+int	get_key(t_select *data)
+{
+	char	buff[5];
+	int	key;
+
+	(void)data;
+	ft_bzero(buff, 5);
+	read(0, buff, 4);
+	key = *((int*)buff);
+	if (key == ESC)
 		return (1);
-	//print_arg(e_tree);
-	print_select(e_tree);
-	ft_trdel(&e_tree, (void(*)(void*, size_t))del_elem);
-	/*char	*str_1;
-	char	*str_2;
-	char	*line;
-	int	ret;
-	struct termios	term;
+	return (0);
+}
 
+int		main(int ac, char **av)
+{
+	t_select	*data;
+	struct termios	term;
+	char		*str_1;
+	char		*str_2;
+
+	
+	data = ret_tree();
+	if (!(data->tree = get_arg(ac, av)))
+		return (1);
+	if ((data->fd = open("/dev/tty", O_RDWR)) == -1)
+	{
+		ft_trdel(&data->tree, (void(*)(void*, size_t))del_elem);
+		return (2);
+	}
+	signal(SIGWINCH, ft_resize);
 	tcgetattr(0, &term);
-	ft_printf("%d\t%d\n", term.c_cc[VMIN], term.c_cc[VTIME]);
-	term.c_lflag ^= (ICANON);
-	//ft_printf("%d\n", term.c_lflag);
-	tcsetattr(0, TCSANOW, &term);
-	//term.c_lflag &= ~(ICANON | ECHO);
+	term.c_lflag ^= (ECHO | ICANON);
+	if (tcsetattr(0, TCSANOW, &term) == -1)
+		return (3);
 	str_1 = getenv("TERM");
 	str_2 = NULL;
-	line = NULL;
-	ret = tgetent(str_2, str_1);
-	//tputs(tgetstr("cl", NULL), 1, putit);
-	ft_printf("21_sh$> ");
-	while (get_next_line(0, &line) > 0)
+	tgetent(str_2, str_1);
+	tputs(tgetstr("ti", NULL), data->fd, putit);
+	tputs(tgetstr("vi", NULL), data->fd, putit);
+	while (42)
 	{
-		ft_printf("%s\n", line);
-		ft_printf("21_sh$> ");
-		free(line);
+		tputs(tgetstr("cl", NULL), data->fd, putit);
+		print_select(data);
+		if (get_key(data))
+			break ;
 	}
-	free(line);
-	free(str_2);*/
+	tputs(tgetstr("te", NULL), data->fd, putit);
+	tputs(tgetstr("ve", NULL), data->fd, putit);
+	close(data->fd);
+	ft_trdel(&data->tree, (void(*)(void*, size_t))del_elem);
 	//while (42);
 	return (0);
 }

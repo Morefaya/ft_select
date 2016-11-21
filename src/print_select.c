@@ -16,7 +16,7 @@ int	get_largest(t_tree *tree)
 	return (large);
 }
 
-static void	print_col(t_tree *tree, int len, int nb_col)
+static void	print_col(t_tree *tree, int len, int nb_col, int fd)
 {
 	int	tmp;
 	int	i;
@@ -25,16 +25,16 @@ static void	print_col(t_tree *tree, int len, int nb_col)
 	while (tree)
 	{
 		tmp = ft_strlen(NAME(tree));
-		ft_printf("%s", NAME(tree));
+		ft_putstr_fd(NAME(tree), fd);
 		tmp = tmp + 8 - tmp % 8;
 		while (tmp <= len)
 		{
-			ft_putchar('\t');
+			ft_putchar_fd('\t', fd);
 			tmp += 8;
 		}
 		tree = tree->right;
 		if (!(i % nb_col))
-			ft_putchar('\n');
+			ft_putchar_fd('\n', fd);
 		i++;
 	}
 }
@@ -59,22 +59,22 @@ static int	check_term_size(struct winsize ws, t_tree *tree, int large)
 		return (0);
 }
 
-void	print_select(t_tree *tree)
+void	print_select(t_select *data)
 {
 	int		large;
 	struct winsize	ws;
 
-	if ((ioctl(1, TIOCGWINSZ, &ws) == -1))
+	if ((ioctl(data->fd, TIOCGWINSZ, &ws) == -1))
 	{
-		ft_printf("error ioctl\n");
+		ft_putendl_fd("error ioctl", data->fd);
 		return ;
 	}
-	large = get_largest(tree);
+	large = get_largest(data->tree);
 	large = large + 8 - large % 8;
-	if (check_term_size(ws, tree, large))
+	if (check_term_size(ws, data->tree, large))
 	{
-		ft_printf("window too small\n");
+		ft_putendl_fd("window too small", data->fd);
 		return ;
 	}
-	print_col(tree, large, ws.ws_col / large);
+	print_col(data->tree, large, ws.ws_col / large, data->fd);
 }
