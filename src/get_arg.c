@@ -27,7 +27,6 @@ t_tree		*get_arg(int ac, char **av)
 	while (i < ac)
 	{
 		content.name = av[i];
-		content.cur = (i == 1) ? 1 : 0;
 		content.select = 0;
 		if (!(tmp = ft_trnew(&content, sizeof(content))))
 		{

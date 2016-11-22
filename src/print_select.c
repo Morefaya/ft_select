@@ -16,25 +16,37 @@ int	get_largest(t_tree *tree)
 	return (large);
 }
 
-static void	print_col(t_tree *tree, int len, int nb_col, int fd)
+static void	print_col(t_select *data, short ws_col, int len)
 {
 	int	tmp;
 	int	i;
+	t_tree	*tree;
 
 	i = 1;
+	tree = data->tree;
 	while (tree)
 	{
 		tmp = ft_strlen(NAME(tree));
-		ft_putstr_fd(NAME(tree), fd);
+		if (tree == POS(data->pos))
+		{
+			ft_putstr_fd(BOLD, data->fd);
+			tputs(tgetstr("us", NULL), data->fd, putit);
+		}
+		if (SELECT(tree))
+			tputs(tgetstr("mr", NULL), data->fd, putit);
+		ft_putstr_fd(NAME(tree), data->fd);
+		ft_putstr_fd(NORM, data->fd);
+		tputs(tgetstr("ue", NULL), data->fd, putit);
+		tputs(tgetstr("me", NULL), data->fd, putit);
 		tmp = tmp + 8 - tmp % 8;
 		while (tmp <= len)
 		{
-			ft_putchar_fd('\t', fd);
+			ft_putchar_fd('\t', data->fd);
 			tmp += 8;
 		}
 		tree = tree->right;
-		if (!(i % nb_col))
-			ft_putchar_fd('\n', fd);
+		if (!(i % (ws_col / len)))
+			ft_putchar_fd('\n', data->fd);
 		i++;
 	}
 }
@@ -76,5 +88,5 @@ void	print_select(t_select *data)
 		ft_putendl_fd("window too small", data->fd);
 		return ;
 	}
-	print_col(data->tree, large, ws.ws_col / large, data->fd);
+	print_col(data, ws.ws_col, large);
 }

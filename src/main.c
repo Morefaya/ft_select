@@ -24,7 +24,6 @@ int	putit(int c)
 	return (0);
 }
 
-
 static void	ft_resize(int c)
 {
 	t_select	*data;
@@ -35,35 +34,12 @@ static void	ft_resize(int c)
 	print_select(data);
 }
 
-int	get_key(t_select *data)
-{
-	char	buff[5];
-	int		key;
-	int		ret;
-
-	ret = 0;
-	(void)data;
-	ft_bzero(buff, 5);
-	read(0, buff, 4);
-	key = *((int*)buff);
-	if (key == ESC)
-		return (1);
-	else if ((ret = move(data, key)))
-		return (ret);
-	else if ((ret = del_elem(data, key)))
-		return (ret);
-	else if (key = RET)
-		return (7);
-	return (0);
-}
-
 int		main(int ac, char **av)
 {
 	t_select	*data;
 	struct termios	term;
 	char		*str_1;
 	char		*str_2;
-
 	
 	data = ret_tree();
 	if (!(data->tree = get_arg(ac, av)))
@@ -74,9 +50,13 @@ int		main(int ac, char **av)
 		free(data);
 		return (2);
 	}
-	/*if ((data->pos = lst_index(data->tree)))
+	if (!(data->pos = get_pos_lst(data->tree)))
 	{
-	}*/
+		close(data->fd);
+		ft_trdel(&data->tree, (void(*)(void*, size_t))del_elem);
+		free(data);
+		return (3);
+	}
 	signal(SIGWINCH, ft_resize);
 	tcgetattr(0, &term);
 	term.c_lflag ^= (ECHO | ICANON);
@@ -96,9 +76,8 @@ int		main(int ac, char **av)
 	}
 	tputs(tgetstr("te", NULL), data->fd, putit);
 	tputs(tgetstr("ve", NULL), data->fd, putit);
-	close(data->fd);
-	ft_trdel(&data->tree, (void(*)(void*, size_t))del_elem);
-	free(data);
+	display_selected(data);
+	free_all(data);
 	//while (42);
 	return (0);
 }
