@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcazako <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/23 16:09:07 by jcazako           #+#    #+#             */
+/*   Updated: 2016/11/23 16:09:10 by jcazako          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 static void	move_d(t_select *data, int nb_col)
@@ -21,7 +33,7 @@ static void	move_u(t_select *data, int nb_col)
 static int	get_nb_col(t_select *data)
 {
 	struct winsize	ws;
-	int		largest;
+	int				largest;
 
 	if ((ioctl(data->fd, TIOCGWINSZ, &ws) == -1))
 	{
@@ -33,7 +45,7 @@ static int	get_nb_col(t_select *data)
 	return (ws.ws_col / largest);
 }
 
-int		move(t_select *data, int key)
+int			move(t_select *data, int key)
 {
 	int	nb_col;
 

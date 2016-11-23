@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcazako <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/23 16:11:20 by jcazako           #+#    #+#             */
+/*   Updated: 2016/11/23 16:11:22 by jcazako          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 void	resize(int c)
@@ -12,11 +24,11 @@ void	resize(int c)
 
 void	ctl_z(int c)
 {
-	(void)c;
-	t_select	*data;
+	t_select		*data;
 	struct termios	term;
-	char		chr[2];
+	char			chr[2];
 
+	(void)c;
 	data = ret_tree();
 	if (!isatty(data->fd))
 		return ;
@@ -31,7 +43,7 @@ void	ctl_z(int c)
 
 void	fg_bg(int c)
 {
-	t_select	*data;
+	t_select		*data;
 	struct termios	term;
 
 	(void)c;

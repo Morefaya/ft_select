@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_key.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcazako <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/23 16:08:05 by jcazako           #+#    #+#             */
+/*   Updated: 2016/11/23 16:08:07 by jcazako          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 static int	selected(t_select *data)
@@ -26,7 +38,7 @@ static int	del_cur(t_select *data)
 	}
 }
 
-int	get_key(t_select *data)
+int			get_key(t_select *data)
 {
 	char	buff[4];
 	int		key;
@@ -43,7 +55,7 @@ int	get_key(t_select *data)
 		tputs(tgetstr("ve", NULL), data->fd, putit);
 		free_all(data);
 		exit(0);
-	}	
+	}
 	else if (key == RIGHT || key == LEFT || key == UP || key == DOWN)
 		return (move(data, key));
 	else if (key == SPACE)

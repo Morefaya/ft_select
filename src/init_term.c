@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_term.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcazako <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/23 16:07:10 by jcazako           #+#    #+#             */
+/*   Updated: 2016/11/23 16:13:01 by jcazako          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 static int	ret_init(t_select *data, char *str)
@@ -8,10 +20,10 @@ static int	ret_init(t_select *data, char *str)
 	return (1);
 }
 
-int		init_term(t_select *data)
+int			init_term(t_select *data)
 {
 	struct termios	term;
-	char		*str_1;
+	char			*str_1;
 
 	tcgetattr(data->fd, &term);
 	term.c_lflag ^= (ECHO | ICANON);

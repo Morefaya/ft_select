@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcazako <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/23 16:09:52 by jcazako           #+#    #+#             */
+/*   Updated: 2016/11/23 16:13:33 by jcazako          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 t_select	*ret_tree(void)
@@ -15,10 +27,10 @@ t_select	*ret_tree(void)
 	return (data);
 }
 
-int		putit(int c)
+int			putit(int c)
 {
 	t_select	*data;
-	
+
 	data = ret_tree();
 	ft_putchar_fd(c, data->fd);
 	return (0);
@@ -45,10 +57,10 @@ static int	init_data(int ac, char **av, t_select *data)
 	return (0);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_select	*data;
-	
+
 	data = ret_tree();
 	if (init_data(ac, av, data))
 		return (1);

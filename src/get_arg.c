@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_arg.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcazako <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/23 16:06:36 by jcazako           #+#    #+#             */
+/*   Updated: 2016/11/23 16:06:38 by jcazako          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 static void	tr_add_first(t_tree **a_tree, t_tree *new)
@@ -20,7 +32,7 @@ t_tree		*get_arg(int ac, char **av)
 	t_tree	*e_tree;
 	t_tree	*tmp;
 	t_elem	content;
-	int	i;
+	int		i;
 
 	e_tree = NULL;
 	i = 1;
