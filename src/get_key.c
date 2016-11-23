@@ -6,6 +6,7 @@ static int	selected(t_select *data)
 
 	tree = POS(data->pos);
 	SELECT(tree) = (SELECT(tree)) ? 0 : 1;
+	ft_lstrotate(&data->pos);
 	return (0);
 }
 
@@ -34,7 +35,7 @@ int	get_key(t_select *data)
 	ret = 0;
 	(void)data;
 	ft_bzero(buff, 4);
-	read(0, buff, 4);
+	read(data->fd, buff, 4);
 	key = *((int*)buff);
 	if (key == ESC || key == CTL_D)
 	{

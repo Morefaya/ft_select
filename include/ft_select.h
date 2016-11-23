@@ -36,6 +36,8 @@ typedef struct	s_elem
 	int	select;
 }		t_elem;
 
+typedef struct	termios t_term;
+
 typedef struct	s_select
 {
 	t_tree	*tree;
@@ -57,5 +59,10 @@ int		get_key(t_select *data);
 int		display_selected(t_select *data);
 void		free_all(t_select *data);
 void		trdel_addr(t_tree **tree, t_tree *link, void (*del)(void*, size_t));
+int		init_term(t_select *data);
+void		resize(int c);
+void		ctl_z(int c);
+void		fg_bg(int c);
+t_select	*ret_tree(void);
 
 #endif

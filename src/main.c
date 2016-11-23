@@ -1,6 +1,6 @@
 #include "ft_select.h"
 
-static t_select	*ret_tree(void)
+t_select	*ret_tree(void)
 {
 	static t_select	*data = NULL;
 
@@ -15,7 +15,7 @@ static t_select	*ret_tree(void)
 	return (data);
 }
 
-int	putit(int c)
+int		putit(int c)
 {
 	t_select	*data;
 	
@@ -24,49 +24,41 @@ int	putit(int c)
 	return (0);
 }
 
-static void	ft_resize(int c)
+static int	init_data(int ac, char **av, t_select *data)
 {
-	t_select	*data;
-
-	data = ret_tree();
-	(void)c;
-	tputs(tgetstr("cl", NULL), data->fd, putit);
-	print_select(data);
-}
-
-int		main(int ac, char **av)
-{
-	t_select	*data;
-	struct termios	term;
-	char		*str_1;
-	char		*str_2;
-	
-	data = ret_tree();
+	data->tree = NULL;
+	data->fd = -1;
+	data->pos = NULL;
 	if (!(data->tree = get_arg(ac, av)))
 		return (1);
 	if ((data->fd = open("/dev/tty", O_RDWR)) == -1)
 	{
-		ft_trdel(&data->tree, (void(*)(void*, size_t))del_elem);
-		free(data);
+		free_all(data);
 		return (2);
 	}
 	if (!(data->pos = get_pos_lst(data->tree)))
 	{
 		close(data->fd);
-		ft_trdel(&data->tree, (void(*)(void*, size_t))del_elem);
-		free(data);
+		free_all(data);
 		return (3);
 	}
-	signal(SIGWINCH, ft_resize);
-	tcgetattr(0, &term);
-	term.c_lflag ^= (ECHO | ICANON);
-	if (tcsetattr(0, TCSANOW, &term) == -1)
-		return (3);
-	str_1 = getenv("TERM");
-	str_2 = NULL;
-	tgetent(str_2, str_1);
+	return (0);
+}
+
+int		main(int ac, char **av)
+{
+	t_select	*data;
+	
+	data = ret_tree();
+	if (init_data(ac, av, data))
+		return (1);
+	if (init_term(data))
+		return (2);
 	tputs(tgetstr("ti", NULL), data->fd, putit);
 	tputs(tgetstr("vi", NULL), data->fd, putit);
+	signal(SIGWINCH, resize);
+	signal(SIGTSTP, ctl_z);
+	signal(SIGCONT, fg_bg);
 	while (42)
 	{
 		tputs(tgetstr("cl", NULL), data->fd, putit);
@@ -78,6 +70,5 @@ int		main(int ac, char **av)
 	tputs(tgetstr("ve", NULL), data->fd, putit);
 	display_selected(data);
 	free_all(data);
-	//while (42);
 	return (0);
 }
