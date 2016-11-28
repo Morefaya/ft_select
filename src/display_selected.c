@@ -22,15 +22,15 @@ int	display_selected(t_select *data)
 	while (tree)
 	{
 		if (i && SELECT(tree))
-			ft_putchar_fd(' ', data->fd);
+			ft_putchar_fd(' ', 1);
 		if (SELECT(tree))
 		{
-			ft_putstr_fd(NAME(tree), data->fd);
+			ft_putstr_fd(NAME(tree), 1);
 			i++;
 		}
 		tree = tree->right;
 		if (!tree && i)
-			ft_putchar_fd('\n', data->fd);
+			ft_putchar_fd('\n', 1);
 	}
 	return (1);
 }
