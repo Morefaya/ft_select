@@ -57,3 +57,20 @@ void	fg_bg(int c)
 	tputs(tgetstr("ho", NULL), data->fd, putit);
 	print_select(data);
 }
+
+void	ctl_c(int c)
+{
+	t_select		*data;
+	struct termios	term;
+
+	(void)c;
+	data = ret_tree();
+	if (!isatty(data->fd))
+		return ;
+	tcgetattr(data->fd, &term);
+	term.c_lflag ^= (ECHO | ICANON);
+	tcsetattr(data->fd, TCSANOW, &term);
+	tputs(tgetstr("te", NULL), data->fd, putit);
+	tputs(tgetstr("ve", NULL), data->fd, putit);
+	exit(0);
+}

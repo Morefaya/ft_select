@@ -71,6 +71,7 @@ int			main(int ac, char **av)
 	signal(SIGWINCH, resize);
 	signal(SIGTSTP, ctl_z);
 	signal(SIGCONT, fg_bg);
+	signal(SIGINT, ctl_c);
 	while (42)
 	{
 		tputs(tgetstr("cl", NULL), data->fd, putit);

@@ -76,6 +76,8 @@ int				init_term(t_select *data);
 void			resize(int c);
 void			ctl_z(int c);
 void			fg_bg(int c);
+void			ctl_c(int c);
 t_select		*ret_tree(void);
+
 
 #endif
